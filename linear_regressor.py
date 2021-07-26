@@ -2,9 +2,11 @@ class LinearRegressor:
     def __init__(self) -> None:
         pass
 
-    def score_all(self, train, test, val):
+    def fit(self, dataset):
+        X = dataset[0]
+        y = dataset[1]
         pass
 
-    def fit(self, X):
+    def score_all(self, train, test, val):
         pass
 
