@@ -10,13 +10,14 @@ data_set = get_boston_train_test_val_datasets()
 all_model_results = []
 for model_name in models.keys():
     model = models[model_name]
+
     model.fit(data_set["train"])
 
     model_results = model.score_all(
         data_set["train"], data_set["test"], data_set["val"]
     )
 
-    all_model_results.append(model_results)
+    all_model_results.append((model_name, *model_results))
 
 
 df = pd.DataFrame(
