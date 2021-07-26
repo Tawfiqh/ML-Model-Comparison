@@ -1,0 +1,39 @@
+from sklearn import datasets
+from sklearn import model_selection
+from sklearn import preprocessing
+
+
+def generate_random_seed():
+    return 3
+    # Keep this fixed for now -- so that every time we call this (for different models) it returns the same split
+    # Want to keep it fixed so we can compare across different runs.
+    # Can change this function to be more dyanmic in future.
+
+
+random_seed = generate_random_seed()
+
+
+def get_boston_train_test_val_datasets():
+    X, y = datasets.load_boston(return_X_y=True)
+
+    # random-state fr test_split will default to using the global random state instance from numpy.random. Calling the function multiple times will reuse the same instance, and will produce different results.
+    X_train, X_test, y_train, y_test = model_selection.train_test_split(
+        X, y, test_size=0.2, random_state=random_seed
+    )
+    X_train, X_val, y_train, y_val = model_selection.train_test_split(
+        X_train, y_train, test_size=0.25, random_state=random_seed
+    )  # 0.25 x 0.8 = 0.2
+
+    # Normalise data before returning it
+    sc = preprocessing.StandardScaler()
+    sc.fit(X_train)
+    X_train_normalised = sc.transform(X_train)
+    X_test_normalised = sc.transform(X_test)
+    X_val_normalised = sc.transform(X_val)
+
+    train = (X_train_normalised, y_train)
+    test = (X_test_normalised, y_test)
+    val = (X_val_normalised, y_val)
+
+    return {"train": train, "test": test, "val": val}
+
