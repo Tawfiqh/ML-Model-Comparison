@@ -1,6 +1,8 @@
+from sklearn import linear_model
+
 class LinearRegressor:
     def __init__(self) -> None:
-        pass
+        self.model = linear_model.LinearRegression()
 
     def score_all():
         pass
