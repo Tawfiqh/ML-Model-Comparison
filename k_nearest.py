@@ -23,22 +23,22 @@ class KNearest(BaseModel):
                     )
                     results = [algorithm, n_neighbors, leaf_size, score]
 
-                    print(
-                        f"Trained model with algorithm-{algorithm}  n_neighbors-{n_neighbors}  leaf_size-{leaf_size}  and score:{score}"
-                    )
+                    # print(
+                    #     f"Trained model with algorithm-{algorithm}  n_neighbors-{n_neighbors}  leaf_size-{leaf_size}  and score:{score}"
+                    # )
                     all_results.append(results)
 
         df = pd.DataFrame(
             all_results, columns=["algorithm", "n_neighbors", "leaf_size", "score"],
         )
         pd.options.display.float_format = "{:,.4f}".format
-        print("Hypertuning k-nearest - results:")
-        print(df)
-        print()
+        # print("Hypertuning k-nearest - results:")
+        # print(df)
+        # print()
 
         best_result = df[df["score"] == df["score"].max()]
-        print("Best model result:")
-        print(best_result)
+        # print("Best model result:")
+        # print(best_result)
 
         self.algorithm = best_result["algorithm"].head(1).item()
         self.n_neighbors = best_result["n_neighbors"].head(1).item()
@@ -56,9 +56,9 @@ class KNearest(BaseModel):
 
         score = self._fit_hyperparameters(X, y, n_neighbors, algorithm, leaf_size)
 
-        print(
-            f"Trained model with algorithm-{algorithm}  n_neighbors-{n_neighbors}  leaf_size-{leaf_size}  and score:{score}"
-        )
+        # print(
+        #     f"Trained model with algorithm-{algorithm}  n_neighbors-{n_neighbors}  leaf_size-{leaf_size}  and score:{score}"
+        # )
         return
 
     def _fit_hyperparameters(self, X, y, n_neighbors, algorithm, leaf_size):
