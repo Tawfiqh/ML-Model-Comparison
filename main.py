@@ -1,3 +1,5 @@
+# %%
+from scipy.sparse import data
 from k_nearest import KNearest
 from linear_regressor import LinearRegressor
 from svm import Svm_svr
