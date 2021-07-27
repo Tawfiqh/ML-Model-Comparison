@@ -2,10 +2,9 @@ class KNearest:
     def __init__(self) -> None:
         pass
 
-
-    def score_all():
+    def fit(self, dataset):
         pass
 
-    def fit():
+    def score_all(self, train, test, val):
         pass
 

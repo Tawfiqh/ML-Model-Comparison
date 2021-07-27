@@ -40,6 +40,3 @@ class LinearRegressor:
         score_test = self.model.score(*test)
         score_val = self.model.score(*val)
         return score_train, score_test, score_val
-
-
-# %%
