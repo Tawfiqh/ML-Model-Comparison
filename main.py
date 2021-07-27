@@ -4,7 +4,11 @@ from svm import Svm_svr
 from get_data import get_boston_train_test_val_datasets
 import pandas as pd
 
-models = {"K-Nearest": KNearest(), "LinearRegressor": LinearRegressor(), 'SVR': Svm_svr() }
+models = {
+    "K-Nearest": KNearest(),
+    "LinearRegressor": LinearRegressor(),
+    "SVR": Svm_svr(),
+}
 
 
 data_set = get_boston_train_test_val_datasets()
@@ -25,7 +29,6 @@ for model_name in models.keys():
     if model_results:
         all_model_results.append([model_name, *model_results])
 
-
 df = pd.DataFrame(
     all_model_results,
     columns=["model_name", "training_score", "testing_score", "validation_score"],
@@ -38,4 +41,3 @@ print()
 best_result = df[df["validation_score"] == df["validation_score"].max()]
 print("Best model result:")
 print(best_result["model_name"].head(1).item())
-
