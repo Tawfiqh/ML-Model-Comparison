@@ -17,7 +17,7 @@ class LinearRegressor:
                         'normalize':[True,False], 
                         'copy_X':[True, False]}
   
-        self.model = GridSearchCV(self.model, param_grid)
+        self.model = GridSearchCV(self.model, param_grid, cv=5)
   
         self.model.fit(X, y)
         
@@ -40,3 +40,5 @@ class LinearRegressor:
         score_test = self.model.score(*test)
         score_val = self.model.score(*val)
         return score_train, score_test, score_val
+
+# %%
