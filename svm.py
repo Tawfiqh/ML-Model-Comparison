@@ -21,7 +21,6 @@ class Svm_svr:
         X = dataset['data']
         y = dataset['target']
         self.grid_search.fit(X, y)
-        #best_parameters = self.grid_search.best_params_
         self.final_model = self.grid_search.best_estimator_
     
     def score_all(self, train, test, val):
