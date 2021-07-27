@@ -43,3 +43,19 @@ print()
 best_result = df[df["validation_score"] == df["validation_score"].max()]
 print("Best model result:")
 print(best_result["model_name"].head(1).item())
+
+# Plot the time taken vs the validation score
+
+import matplotlib.pyplot as plt
+
+N = 50
+x = df["training_score"]
+y = df["training_score"]
+colors = np.random.rand(N)
+area = (30 * np.random.rand(N)) ** 2  # 0 to 15 point radii
+
+plt.scatter(x, y, s=area, c=colors, alpha=0.5)
+plt.show()
+
+
+# %%
