@@ -1,9 +1,10 @@
 from k_nearest import KNearest
 from linear_regressor import LinearRegressor
+from svm import Svm_svr
 from get_data import get_boston_train_test_val_datasets
 import pandas as pd
 
-models = {"K-Nearest": KNearest(), "LinearRegressor": LinearRegressor()}
+models = {"K-Nearest": KNearest(), "LinearRegressor": LinearRegressor(), 'SVR': Svm_svr() }
 
 
 data_set = get_boston_train_test_val_datasets()
