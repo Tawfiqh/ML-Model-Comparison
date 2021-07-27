@@ -11,7 +11,6 @@ class LinearRegressor:
         X = dataset[0]
         y = dataset[1]
 
-<<<<<<< HEAD
         # defining parameter range 
         param_grid = {'fit_intercept':[True,False], 
                         'normalize':[True,False], 
@@ -19,17 +18,6 @@ class LinearRegressor:
   
         self.model = GridSearchCV(self.model, param_grid, cv=5)
   
-=======
-        # defining parameter range
-        param_grid = {
-            "fit_intercept": [True, False],
-            "normalize": [True, False],
-            "copy_X": [True, False],
-        }
-
-        self.model = GridSearchCV(self.model, param_grid)
-
->>>>>>> 6b31a8055ccb0b0123110f68aeca905732b40e9c
         self.model.fit(X, y)
 
         # # print best parameter after tuning
