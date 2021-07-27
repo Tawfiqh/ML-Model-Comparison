@@ -1,12 +1,6 @@
-# now, each person pick a model we’ve learnt about  ✅
-#   - create a new file for that model in the repo ✅
-#   - create a function to fit the model to some data, and takes in several different hyperparameter values
-#   - create another function which generates random hyperparameter values
-#   - create a final function which calls both of the above functions and returns a list of dictionaries of the train, val and test scores
-
-from scipy.sparse import data
 from sklearn.neighbors import KNeighborsRegressor
 from BaseModel import BaseModel
+import pandas as pd
 
 
 class KNearest(BaseModel):
@@ -22,23 +16,44 @@ class KNearest(BaseModel):
         all_results = []
 
         for algorithm in ["auto", "ball_tree", "kd_tree", "brute"]:
-            for n_neighbors in range(20):
-                for leaf_size in range(0, 100, 10):
+            for n_neighbors in range(1, 21):
+                for leaf_size in range(10, 100, 10):
                     score = self._fit_hyperparameters(
                         X, y, n_neighbors, algorithm, leaf_size
                     )
                     results = [algorithm, n_neighbors, leaf_size, score]
+
+                    print(
+                        f"Trained model with algorithm-{algorithm}  n_neighbors-{n_neighbors}  leaf_size-{leaf_size}  and score:{score}"
+                    )
                     all_results.append(results)
+
+        df = pd.DataFrame(
+            all_results, columns=["algorithm", "n_neighbors", "leaf_size", "score"],
+        )
+        pd.options.display.float_format = "{:,.4f}".format
+        print("Hypertuning k-nearest - results:")
+        print(df)
+        print()
+
+        best_result = df[df["score"] == df["score"].max()]
+        print("Best model result:")
+        print(best_result)
+
+        self.algorithm = best_result["algorithm"].head(1).item()
+        self.n_neighbors = best_result["n_neighbors"].head(1).item()
+        self.leaf_size = best_result["leaf_size"].head(1).item()
 
     def fit(self, dataset):
         X = dataset[0]
         y = dataset[1]
 
-        # self.find_hyper_paramters(dataset)
+        self.find_hyper_paramters(dataset)
 
         algorithm = self.algorithm
         n_neighbors = self.n_neighbors
         leaf_size = self.leaf_size
+
         score = self._fit_hyperparameters(X, y, n_neighbors, algorithm, leaf_size)
 
         print(
