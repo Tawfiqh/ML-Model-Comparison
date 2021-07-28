@@ -25,9 +25,8 @@ Which models to try (from sklearn):
     - the time taken to fit the model ✅
 
 
-- evaluate them on all of sklearn's toy regression datasets available in sklearn.datasets ⏳
-
-- create a main.py file which loops through each dataset and each model, printing the results
+- evaluate them on all of sklearn's toy regression datasets available in sklearn.datasets  ✅
+- create a main.py file which loops through each dataset and each model, printing the results ✅
 
 
 
@@ -41,3 +40,5 @@ Which models to try (from sklearn):
 - Grid-search-CV = we want to give our test/train split
 	- KNN - we want to give it grid-search-CV
 	- We need to update all our function-signatures - to fit on a train/test
+
+        - Decision tree 

@@ -41,10 +41,14 @@ def run_all_models_on_dataset(models, data_set):
         time_finished_scoring = perf_counter()
         scoring_time = time_finished_scoring - time_finished_fit
 
+        model_mse_results = model.score_all_mse(
+            data_set["train"], data_set["test"], data_set["val"]
+        )
+
         # print(f"model_results:{model_results}")
         if model_results:
             all_model_results.append(
-                [model_name, fit_time, scoring_time, *model_results]
+                [model_name, fit_time, scoring_time, *model_results, *model_mse_results]
             )
 
     df = pd.DataFrame(
@@ -53,9 +57,12 @@ def run_all_models_on_dataset(models, data_set):
             "model_name",
             "fit_time",
             "scoring_time",
-            "training_score",
-            "testing_score",
-            "validation_score",
+            "training_r^2_score",
+            "testing_r^2_score",
+            "validation_r^2_score",
+            "training_mse_score",
+            "testing_mse_score",
+            "validation_mse_score",
         ],
     )
     pd.options.display.float_format = "{:,.4f}".format
@@ -63,16 +70,16 @@ def run_all_models_on_dataset(models, data_set):
     print(df)
     print()
 
-    best_result = df[df["validation_score"] == df["validation_score"].max()]
+    best_result = df[df["validation_r^2_score"] == df["validation_r^2_score"].max()]
     print("Best model result:")
     print(best_result["model_name"].head(1).item())
 
     # Plot the time taken vs the validation score
     N = 50
     x = df["fit_time"]
-    y = df["validation_score"]
+    y = df["validation_r^2_score"]
 
-    plt.ylabel("validation_score")
+    plt.ylabel("validation_r^2_score")
     plt.xlabel("fit_time")
     plt.title("Fit Time vs Validation Score")
 
@@ -90,11 +97,11 @@ def run_all_models_on_dataset(models, data_set):
 
     rects2 = plt.bar(
         index + bar_width,
-        df["validation_score"],
+        df["validation_r^2_score"],
         bar_width,
         alpha=opacity,
         color="g",
-        label="validation_score",
+        label="validation_r^2_score",
     )
 
     # plt.xlabel("Dataset")

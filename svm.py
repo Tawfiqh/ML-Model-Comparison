@@ -1,6 +1,7 @@
 from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV
 from BaseModel import BaseModel
+import numpy as np
 
 
 class Svm_svr(BaseModel):
@@ -17,7 +18,8 @@ class Svm_svr(BaseModel):
         self.model = 0
 
     def fit(self, dataset, dataset_train):
-        X = dataset[0]
-        y = dataset[1]
+        X = np.concatenate((dataset[0], dataset_train[0]), axis=0)
+        y = np.concatenate((dataset[1], dataset_train[1]), axis=0)
+
         self.grid_search.fit(X, y)
         self.model = self.grid_search.best_estimator_
