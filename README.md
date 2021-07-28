@@ -31,14 +31,13 @@ Which models to try (from sklearn):
 
 
 - graphical visualisations of
-    - time to fit each of the best models
-    - final train, validation and test set loss scores
-    - final train, validation and test set R-squared scores
+    - time to fit each of the best models ✅
+    - final train, validation and test set loss/mse scores  ✅
+    - final train, validation and test set R-squared scores (= model.score) ✅
 
 - small paragraph written for each model explaining hypotheses for your visualised results
 
 - Grid-search-CV = we want to give our test/train split
 	- KNN - we want to give it grid-search-CV
 	- We need to update all our function-signatures - to fit on a train/test
-
         - Decision tree 
