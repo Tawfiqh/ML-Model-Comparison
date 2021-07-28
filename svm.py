@@ -1,8 +1,9 @@
 from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV
+from BaseModel import BaseModel
 
 
-class Svm_svr:
+class Svm_svr(BaseModel):
     def __init__(self) -> None:
 
         self.param_grid = {
@@ -15,17 +16,10 @@ class Svm_svr:
         self.grid_search = GridSearchCV(
             SVR(), self.param_grid, cv=5, scoring="accuracy"
         )
-        self.final_model = 0
+        self.model = 0
 
     def fit(self, dataset):
         X = dataset[0]
         y = dataset[1]
         self.grid_search.fit(X, y)
-        self.final_model = self.grid_search.best_estimator_
-
-    def score_all(self, train, test, val):
-        return (
-            self.final_model.score(*train),
-            self.final_model.score(*test),
-            self.final_model.score(*val),
-        )
+        self.model = self.grid_search.best_estimator_

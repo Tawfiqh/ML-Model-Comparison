@@ -1,8 +1,10 @@
+from BaseModel import BaseModel
 from sklearn import linear_model
 from sklearn.model_selection import GridSearchCV
+from BaseModel import BaseModel
 
 
-class LinearRegressor:
+class LinearRegressor(BaseModel):
     def __init__(self) -> None:
         self.model = linear_model.LinearRegression()
 
@@ -35,9 +37,3 @@ class LinearRegressor:
 
         # print('Residual sum of squares: %.2f'
         #       % np.mean((self.grid_model.predict(X) - y) ** 2))
-
-    def score_all(self, train, test, val):
-        score_train = self.model.score(*train)
-        score_test = self.model.score(*test)
-        score_val = self.model.score(*val)
-        return score_train, score_test, score_val
