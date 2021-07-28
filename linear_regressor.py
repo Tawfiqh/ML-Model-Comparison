@@ -17,7 +17,6 @@ class LinearRegressor(BaseModel):
         param_grid = {
             "fit_intercept": [True, False],
             "normalize": [True, False],
-            "copy_X": [True, False],
         }
 
         self.model = GridSearchCV(self.model, param_grid)

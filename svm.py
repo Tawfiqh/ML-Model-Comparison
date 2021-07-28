@@ -13,9 +13,7 @@ class Svm_svr(BaseModel):
             #'gamma' : np.logspace(-3, 2, 6)
             "epsilon": [0.5],  # , 0.1, 1.5]
         }
-        self.grid_search = GridSearchCV(
-            SVR(), self.param_grid, cv=5, scoring="accuracy"
-        )
+        self.grid_search = GridSearchCV(SVR(), self.param_grid, cv=5)
         self.model = 0
 
     def fit(self, dataset, dataset_train):

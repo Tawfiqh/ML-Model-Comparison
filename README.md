@@ -25,14 +25,16 @@ Which models to try (from sklearn):
     - the time taken to fit the model ✅
 
 
+- evaluate them on all of sklearn's toy regression datasets available in sklearn.datasets ⏳
+
+- create a main.py file which loops through each dataset and each model, printing the results
+
+
+
 - graphical visualisations of
     - time to fit each of the best models
     - final train, validation and test set loss scores
     - final train, validation and test set R-squared scores
-
-- evaluate them on all of sklearn's toy regression datasets available in sklearn.datasets ⏳
-
-- create a main.py file which loops through each dataset and each model, printing the results
 
 - small paragraph written for each model explaining hypotheses for your visualised results
 

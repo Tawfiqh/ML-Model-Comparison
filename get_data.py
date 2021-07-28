@@ -13,8 +13,7 @@ def generate_random_seed():
 random_seed = generate_random_seed()
 
 
-def get_boston_train_test_val_datasets():
-    X, y = datasets.load_boston(return_X_y=True)
+def split_into_train_test_val_datasets(X, y):
 
     # random-state fr test_split will default to using the global random state instance from numpy.random. Calling the function multiple times will reuse the same instance, and will produce different results.
     X_train, X_test, y_train, y_test = model_selection.train_test_split(
@@ -38,4 +37,14 @@ def get_boston_train_test_val_datasets():
     whole_dataset = (X_whole_normalised, y)
 
     return {"train": train, "test": test, "val": val, "whole": whole_dataset}
+
+
+def get_boston_train_test_val_datasets():
+    X, y = datasets.load_boston(return_X_y=True)
+    return split_into_train_test_val_datasets(X, y)
+
+
+def get_diabetes_train_test_val_datasets():
+    X, y = datasets.load_diabetes(return_X_y=True)
+    return split_into_train_test_val_datasets(X, y)
 
