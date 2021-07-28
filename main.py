@@ -23,12 +23,8 @@ for model_name in models.keys():
     model = models[model_name]
     time_start = perf_counter()
 
-    # Tune (if the model has a function for tuning)
-    if getattr(model, "find_hyper_paramters", None):
-        model.find_hyper_paramters(data_set["train"], data_set["test"])
-
-    # FIT
-    model.fit(data_set["train"])
+    # Tune + FIT
+    model.fit(data_set["train"], dataset_train=data_set["test"])
 
     time_finished_fit = perf_counter()
     fit_time = time_finished_fit - time_start

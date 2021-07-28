@@ -30,10 +30,12 @@ def get_boston_train_test_val_datasets():
     X_train_normalised = sc.transform(X_train)
     X_test_normalised = sc.transform(X_test)
     X_val_normalised = sc.transform(X_val)
+    X_whole_normalised = sc.transform(X)
 
     train = (X_train_normalised, y_train)
     test = (X_test_normalised, y_test)
     val = (X_val_normalised, y_val)
+    whole_dataset = (X_whole_normalised, y)
 
-    return {"train": train, "test": test, "val": val}
+    return {"train": train, "test": test, "val": val, "whole": whole_dataset}
 

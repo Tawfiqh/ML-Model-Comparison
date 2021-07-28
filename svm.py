@@ -18,7 +18,7 @@ class Svm_svr(BaseModel):
         )
         self.model = 0
 
-    def fit(self, dataset):
+    def fit(self, dataset, dataset_train):
         X = dataset[0]
         y = dataset[1]
         self.grid_search.fit(X, y)

@@ -8,7 +8,7 @@ class LinearRegressor(BaseModel):
     def __init__(self) -> None:
         self.model = linear_model.LinearRegression()
 
-    def fit(self, dataset):
+    def fit(self, dataset, dataset_train):
 
         X = dataset[0]
         y = dataset[1]

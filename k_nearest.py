@@ -44,11 +44,11 @@ class KNearest(BaseModel):
         self.n_neighbors = best_result["n_neighbors"].head(1).item()
         self.leaf_size = best_result["leaf_size"].head(1).item()
 
-    def fit(self, dataset):
+    def fit(self, dataset, dataset_train):
         X = dataset[0]
         y = dataset[1]
 
-        # self.find_hyper_paramters(dataset, dataset)
+        self.find_hyper_paramters(dataset, dataset_train)
 
         algorithm = self.algorithm
         n_neighbors = self.n_neighbors
