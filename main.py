@@ -22,7 +22,7 @@ models = {
 }
 
 
-def run_all_models_on_dataset(models, data_set):
+def run_all_models_on_dataset(models, data_set, dataset_name, output_to_csv=False):
     all_model_results = []
 
     for model_name in models.keys():
@@ -49,6 +49,18 @@ def run_all_models_on_dataset(models, data_set):
         model_mse_results = model.score_all_mse(
             data_set["train"], data_set["test"], data_set["val"]
         )
+
+        if output_to_csv:
+            # output the result
+            y_hat = model.model.predict(data_set["whole"][0])
+
+            df_main = pd.DataFrame(data_set["whole"][0])
+            y = pd.DataFrame(data_set["whole"][1])
+            y_hat = pd.DataFrame(y_hat)
+
+            df_main["posttest"] = y
+            df_main["y_hat"] = y_hat
+            df_main.to_csv(f"{model_name}_{dataset_name}.csv")
 
         # print(f"model_results:{model_results}")
         if model_results:
@@ -215,9 +227,9 @@ datasets = [
     ("school_results_data_set", school_results_data_set),
 ]
 
-datasets = [
-    ("school_results_data_set", school_results_data_set),
-]
+# datasets = [
+#     ("school_results_data_set", school_results_data_set),
+# ]
 
 
 for data_set_name, data_set in datasets:
@@ -228,7 +240,7 @@ for data_set_name, data_set in datasets:
     }
     print()
     print(f"EVALUATING {data_set_name}")
-    run_all_models_on_dataset(models, data_set)
+    run_all_models_on_dataset(models, data_set, data_set_name, output_to_csv=True)
 
 
 # %%

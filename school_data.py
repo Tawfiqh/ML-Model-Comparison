@@ -51,6 +51,8 @@ def load_cleaned_school_data():
 
 
 df = load_cleaned_school_data()
+
+# Extra data analytics we did when inspecting the data
 # %%
 # display(df.isna().sum()) # Check for NaNs
 # display(df.describe())
@@ -59,3 +61,17 @@ df = load_cleaned_school_data()
 
 
 # %%
+# import matplotlib.pyplot as plt
+# import seaborn as sns
+
+# sns.set(rc={"figure.figsize": (11.7, 8.27)})
+# plt.hist(self.df["latest_popularity"], bins=30)
+# plt.xlabel("(Current) popularity of all radio tracks played between 2015-2021")
+# plt.show()
+
+# # correlation between the features (excluding target)
+# # Created a dataframe without the 'popularity' col, since we need to see the correlation between the variables
+# track_data = pd.DataFrame(self.data, columns=self.feature_names)
+
+# correlation_matrix = track_data.corr().round(2)
+# sns.heatmap(data=correlation_matrix, annot=True)
