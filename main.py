@@ -6,6 +6,7 @@ from svm import Svm_svr
 from get_data import (
     get_boston_train_test_val_datasets,
     get_diabetes_train_test_val_datasets,
+    get_school_data_train_test_val_datasets,
 )
 import pandas as pd
 from time import perf_counter
@@ -27,6 +28,10 @@ def run_all_models_on_dataset(models, data_set):
     for model_name in models.keys():
         model = models[model_name]
         time_start = perf_counter()
+
+        # Tune (if the model has a function for tuning)
+        # if getattr(model, "find_hyper_paramters", None):
+        #     model.find_hyper_paramters(data_set["train"], data_set["test"])
 
         # Tune + FIT
         model.fit(data_set["train"], dataset_train=data_set["test"])
@@ -202,11 +207,18 @@ def run_all_models_on_dataset(models, data_set):
 
 boston_data_set = get_boston_train_test_val_datasets()
 diabetes_data_set = get_diabetes_train_test_val_datasets()
+school_results_data_set = get_school_data_train_test_val_datasets()
 
 datasets = [
     ("boston_data_set", boston_data_set),
     ("diabetes_data_set", diabetes_data_set),
+    ("school_results_data_set", school_results_data_set),
 ]
+
+datasets = [
+    ("school_results_data_set", school_results_data_set),
+]
+
 
 for data_set_name, data_set in datasets:
     models = {
@@ -218,3 +230,5 @@ for data_set_name, data_set in datasets:
     print(f"EVALUATING {data_set_name}")
     run_all_models_on_dataset(models, data_set)
 
+
+# %%

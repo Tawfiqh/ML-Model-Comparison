@@ -26,6 +26,5 @@ class BaseModel:
         train_score = self._mse(train)
         test_score = self._mse(test)
         val_score = self._mse(val)
-        print(f"MSE scores: {train_score, test_score, val_score}")
         return train_score, test_score, val_score
 

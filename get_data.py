@@ -1,6 +1,7 @@
 from sklearn import datasets
 from sklearn import model_selection
 from sklearn import preprocessing
+from school_data import load_cleaned_school_data
 
 
 def generate_random_seed():
@@ -48,3 +49,7 @@ def get_diabetes_train_test_val_datasets():
     X, y = datasets.load_diabetes(return_X_y=True)
     return split_into_train_test_val_datasets(X, y)
 
+
+def get_school_data_train_test_val_datasets():
+    X, y = load_cleaned_school_data()
+    return split_into_train_test_val_datasets(X, y)
