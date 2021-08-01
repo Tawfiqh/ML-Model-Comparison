@@ -4,7 +4,7 @@ from BaseModel import BaseModel
 import numpy as np
 
 
-class Svm_svr(BaseModel):
+class Svr(BaseModel):
     def __init__(self) -> None:
 
         self.param_grid = {

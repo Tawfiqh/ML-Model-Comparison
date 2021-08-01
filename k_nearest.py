@@ -16,7 +16,7 @@ class KNearest(BaseModel):
         all_results = []
 
         for algorithm in ["auto", "ball_tree", "kd_tree", "brute"]:
-            for n_neighbors in range(2, 21):
+            for n_neighbors in range(2, 21, 2):
                 for leaf_size in range(10, 100, 10):
                     score = self._fit_hyperparameters(
                         X, y, test_dataset, n_neighbors, algorithm, leaf_size
@@ -37,8 +37,8 @@ class KNearest(BaseModel):
         # print()
 
         best_result = df[df["score"] == df["score"].max()]
-        # print("Best model result:")
-        # print(best_result)
+        print("Best model result:")
+        print(best_result)
 
         self.algorithm = best_result["algorithm"].head(1).item()
         self.n_neighbors = best_result["n_neighbors"].head(1).item()
@@ -48,18 +48,11 @@ class KNearest(BaseModel):
         X = dataset[0]
         y = dataset[1]
 
-        self.find_hyper_paramters(dataset, dataset_train)
+        # self.find_hyper_paramters(dataset, dataset_train)
 
-        algorithm = self.algorithm
-        n_neighbors = self.n_neighbors
-        leaf_size = self.leaf_size
-
-        self._fit_hyperparameters(X, y, None, n_neighbors, algorithm, leaf_size)
-
-        # print(
-        #     f"Trained model with algorithm-{algorithm}  n_neighbors-{n_neighbors}  leaf_size-{leaf_size}"
-        # )
-        return
+        self._fit_hyperparameters(
+            X, y, None, self.n_neighbors, self.algorithm, self.leaf_size
+        )
 
     def _fit_hyperparameters(
         self, X, y, test_dataset, n_neighbors, algorithm, leaf_size

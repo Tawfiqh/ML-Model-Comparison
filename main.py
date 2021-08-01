@@ -1,13 +1,11 @@
 # %%
 from k_nearest import KNearest
 from linear_regressor import LinearRegressor
-from svm import Svm_svr
+from svr import Svr
+from decision_tree import DecisionTree
+from random_forest import RandomForest
 
-from get_data import (
-    get_boston_train_test_val_datasets,
-    get_diabetes_train_test_val_datasets,
-    get_school_data_train_test_val_datasets,
-)
+from get_data import get_car_data_train_test_val_datasets
 import pandas as pd
 from time import perf_counter
 
@@ -15,23 +13,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-models = {
-    "K-Nearest": KNearest(),
-    "LinearRegressor": LinearRegressor(),
-    "SVR": Svm_svr(),
-}
-
-
 def run_all_models_on_dataset(models, data_set, dataset_name, output_to_csv=False):
     all_model_results = []
 
     for model_name in models.keys():
+        print(f"     {model_name}")
         model = models[model_name]
         time_start = perf_counter()
 
         # Tune (if the model has a function for tuning)
-        # if getattr(model, "find_hyper_paramters", None):
-        #     model.find_hyper_paramters(data_set["train"], data_set["test"])
+        if getattr(model, "find_hyper_paramters", None):
+            model.find_hyper_paramters(data_set["train"], data_set["test"])
 
         # Tune + FIT
         model.fit(data_set["train"], dataset_train=data_set["test"])
@@ -217,30 +209,25 @@ def run_all_models_on_dataset(models, data_set, dataset_name, output_to_csv=Fals
     plt.show()
 
 
-boston_data_set = get_boston_train_test_val_datasets()
-diabetes_data_set = get_diabetes_train_test_val_datasets()
-school_results_data_set = get_school_data_train_test_val_datasets()
+car_results_data_set = get_car_data_train_test_val_datasets()
 
 datasets = [
-    ("boston_data_set", boston_data_set),
-    ("diabetes_data_set", diabetes_data_set),
-    ("school_results_data_set", school_results_data_set),
+    ("car_results_data_set", car_results_data_set),
 ]
-
-# datasets = [
-#     ("school_results_data_set", school_results_data_set),
-# ]
 
 
 for data_set_name, data_set in datasets:
     models = {
         "K-Nearest": KNearest(),
         "LinearRegressor": LinearRegressor(),
-        "SVR": Svm_svr(),
+        "SVR": Svr(),
+        "DecisionTree": DecisionTree(),
+        "RandomForest": RandomForest(),
     }
+
     print()
     print(f"EVALUATING {data_set_name}")
-    run_all_models_on_dataset(models, data_set, data_set_name, output_to_csv=True)
+    run_all_models_on_dataset(models, data_set, data_set_name, output_to_csv=False)
 
 
 # %%
