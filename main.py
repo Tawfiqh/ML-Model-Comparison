@@ -22,8 +22,8 @@ def run_all_models_on_dataset(models, data_set, dataset_name, output_to_csv=Fals
         time_start = perf_counter()
 
         # Tune (if the model has a function for tuning)
-        if getattr(model, "find_hyper_paramters", None):
-            model.find_hyper_paramters(data_set["train"], data_set["test"])
+        # if getattr(model, "find_hyper_paramters", None):
+        #     model.find_hyper_paramters(data_set["train"], data_set["test"])
 
         # Tune + FIT
         model.fit(data_set["train"], dataset_train=data_set["test"])

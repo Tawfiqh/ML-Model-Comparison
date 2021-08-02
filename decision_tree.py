@@ -5,8 +5,13 @@ import pandas as pd
 
 class DecisionTree(BaseModel):
     def __init__(self) -> None:
-        self.max_depth = None
-        self.max_leaf_nodes = None
+        self.max_depth = 1861
+        self.max_leaf_nodes = 152
+        # DecisionTree
+        # Best model result:
+        #           max_depth  max_leaf_nodes  score
+        # 18603       1861             152      0.9850
+        # 48403       4841             152      0.9850
 
     def find_hyper_paramters(self, dataset, test_dataset):
         X_train = dataset[0]
@@ -17,8 +22,8 @@ class DecisionTree(BaseModel):
 
         all_results = []
 
-        for max_depth in range(1, 100, 10):
-            for max_leaf_nodes in range(2, 100, 10):
+        for max_depth in range(1, 10000, 20):
+            for max_leaf_nodes in range(2, 10000, 50):
                 clf = tree.DecisionTreeRegressor(
                     max_depth=max_depth, max_leaf_nodes=max_leaf_nodes
                 )

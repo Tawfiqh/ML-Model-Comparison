@@ -36,9 +36,28 @@ def one_hot_encoding_from_list_column(df, column_name, enum_list):
     return df
 
 
+def mean_encoding(df, encoding_column_title, target_variable):
+    # Assuming you want to replace the make with the average price of the make
+    averages = {}
+
+    def average_for_make(make):
+        if make not in averages:
+            average_for_make = df[df[encoding_column_title] == make][
+                target_variable
+            ].mean()
+
+            averages[make] = average_for_make
+
+        return averages[make]
+
+    return df[encoding_column_title].apply(lambda value: average_for_make(value))
+
+
 # Needs to return a tuple - (X, y)
 def load_cleaned_car_data(return_df=False):
     df = load_dataframe()
+    target_variable = "MSRP"
+
     df = one_hot_encoding(
         df,
         [
@@ -67,18 +86,17 @@ def load_cleaned_car_data(return_df=False):
         ],
     )
 
-    df["Make"] = frequency_encoding(df["Make"])
-    df["Model"] = frequency_encoding(df["Model"])
+    df["Make"] = mean_encoding(df, "Make", target_variable)
+    df["Model"] = mean_encoding(df, "Model", target_variable)
 
     # Drop extra columns
-    df = df.drop(["Market Category"], axis=1)
+    df = df.drop(["Market Category", "Popularity"], axis=1)
 
     # Remove NaNs
     df = df.dropna()
 
     # Remove duplicates
     df = df.drop_duplicates()
-    target_variable = "MSRP"
 
     if return_df:
         print("outputting to clean CSV")
@@ -106,6 +124,9 @@ def load_cleaned_car_data(return_df=False):
 
 # No duplicates found?
 # Replace float data-types with int
+
+# %%
+# df[df["Make"] == "BMW"]["MSRP"].mean()
 
 
 # %%

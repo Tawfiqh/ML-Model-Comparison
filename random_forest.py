@@ -5,8 +5,12 @@ import pandas as pd
 
 class RandomForest(BaseModel):
     def __init__(self) -> None:
-        self.max_depth = None
-        self.max_leaf_nodes = None
+        self.max_depth = 608
+        self.max_leaf_nodes = 601
+        #      RandomForest
+        # Best model result:
+        #      max_depth  max_leaf_nodes  score
+        #       608        601             402 0.9878
 
     def find_hyper_paramters(self, dataset, test_dataset):
         X_train = dataset[0]
@@ -17,8 +21,8 @@ class RandomForest(BaseModel):
 
         all_results = []
 
-        for max_depth in range(1, 100, 10):
-            for max_leaf_nodes in range(2, 100, 10):
+        for max_depth in range(1, 1000, 20):
+            for max_leaf_nodes in range(2, 1000, 50):
                 clf = RandomForestRegressor(
                     max_depth=max_depth, max_leaf_nodes=max_leaf_nodes
                 )

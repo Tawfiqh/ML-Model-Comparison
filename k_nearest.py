@@ -5,9 +5,9 @@ import pandas as pd
 
 class KNearest(BaseModel):
     def __init__(self) -> None:
-        self.algorithm = "auto"
-        self.n_neighbors = 5
-        self.leaf_size = 30
+        self.algorithm = "ball_tree"
+        self.n_neighbors = 4
+        self.leaf_size = 20
 
     def find_hyper_paramters(self, dataset, test_dataset):
         X = dataset[0]
@@ -16,7 +16,7 @@ class KNearest(BaseModel):
         all_results = []
 
         for algorithm in ["auto", "ball_tree", "kd_tree", "brute"]:
-            for n_neighbors in range(2, 21, 2):
+            for n_neighbors in range(2, 210, 10):
                 for leaf_size in range(10, 100, 10):
                     score = self._fit_hyperparameters(
                         X, y, test_dataset, n_neighbors, algorithm, leaf_size
