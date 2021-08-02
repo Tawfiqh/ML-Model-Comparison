@@ -8,6 +8,7 @@ from random_forest import RandomForest
 from get_data import get_car_data_train_test_val_datasets
 import pandas as pd
 from time import perf_counter
+from datetime import datetime
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -42,22 +43,31 @@ def run_all_models_on_dataset(models, data_set, dataset_name, output_to_csv=Fals
             data_set["train"], data_set["test"], data_set["val"]
         )
 
+        model_mean_absolute_error = model.mae(data_set["whole"])
+        # output the result
         if output_to_csv:
-            # output the result
-            y_hat = model.model.predict(data_set["whole"][0])
-
-            df_main = pd.DataFrame(data_set["whole"][0])
+            X_df = pd.DataFrame(data_set["whole"][0])
             y = pd.DataFrame(data_set["whole"][1])
+
+            y_hat = model.model.predict(data_set["whole"][0])
             y_hat = pd.DataFrame(y_hat)
 
-            df_main["posttest"] = y
-            df_main["y_hat"] = y_hat
-            df_main.to_csv(f"{model_name}_{dataset_name}.csv")
+            X_df["y"] = y
+            X_df["y_hat"] = y_hat
+
+            X_df.to_csv(f"{model_name}_{dataset_name}.csv")
 
         # print(f"model_results:{model_results}")
         if model_results:
             all_model_results.append(
-                [model_name, fit_time, scoring_time, *model_results, *model_mse_results]
+                [
+                    model_name,
+                    fit_time,
+                    scoring_time,
+                    model_mean_absolute_error,
+                    *model_results,
+                    *model_mse_results,
+                ]
             )
 
     df = pd.DataFrame(
@@ -66,6 +76,7 @@ def run_all_models_on_dataset(models, data_set, dataset_name, output_to_csv=Fals
             "model_name",
             "fit_time",
             "scoring_time",
+            "mean_absolute_error",
             "training_r^2_score",
             "testing_r^2_score",
             "validation_r^2_score",
@@ -77,6 +88,8 @@ def run_all_models_on_dataset(models, data_set, dataset_name, output_to_csv=Fals
     pd.options.display.float_format = "{:,.4f}".format
 
     print(df)
+    current_time = datetime.now().strftime("%Y_%b_%d-%H_%M")
+    df.to_csv(f"results_df_{current_time}.csv")
     print()
 
     best_result = df[df["validation_r^2_score"] == df["validation_r^2_score"].max()]
@@ -85,7 +98,6 @@ def run_all_models_on_dataset(models, data_set, dataset_name, output_to_csv=Fals
 
     # Plot the time taken vs the validation score (scatter)
     # -------------------------------------------
-    N = 50
     x = df["fit_time"]
     y = df["validation_r^2_score"]
 
@@ -220,14 +232,14 @@ for data_set_name, data_set in datasets:
     models = {
         "K-Nearest": KNearest(),
         "LinearRegressor": LinearRegressor(),
-        "SVR": Svr(),
+        # "SVR": Svr(),
         "DecisionTree": DecisionTree(),
         "RandomForest": RandomForest(),
     }
 
     print()
     print(f"EVALUATING {data_set_name}")
-    run_all_models_on_dataset(models, data_set, data_set_name, output_to_csv=False)
+    run_all_models_on_dataset(models, data_set, data_set_name, output_to_csv=True)
 
 
 # %%

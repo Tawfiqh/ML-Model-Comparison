@@ -1,4 +1,6 @@
 from sklearn.metrics import mean_squared_error
+import pandas as pd
+import numpy as np
 
 
 class BaseModel:
@@ -28,3 +30,17 @@ class BaseModel:
         val_score = self._mse(val)
         return train_score, test_score, val_score
 
+    def mae(self, data_set):
+        X_df = pd.DataFrame(data_set[0])
+        y = pd.DataFrame(data_set[1])
+
+        y_hat = self.model.predict(data_set[0])
+        y_hat = pd.DataFrame(y_hat)
+
+        X_df["y"] = y
+        X_df["y_hat"] = y_hat
+
+        X_df["error"] = X_df["y"] - X_df["y_hat"]
+        X_df["absolute_error"] = X_df["error"].abs()
+        mean_absolute_error = np.mean(X_df["absolute_error"])
+        return mean_absolute_error
