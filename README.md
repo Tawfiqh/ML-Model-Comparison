@@ -1,8 +1,10 @@
 
-Model evaluation mini-project
-Aim: Develop a program to evaluate the performance of several supervised models on regression datasets
-In this repo we look at applying a variety of SupervisedLearning models to predict a variety of regression data-sets.
-# Setup
+# Model evaluation mini-project  
+Aim: Develop a program to evaluate the performance of several supervised models on regression datasets  
+
+In this repo we look at applying a variety of SupervisedLearning models to predict a variety of regression data-sets.  
+
+## Setup
 I used this dataset from Kaggle for car prices:
 https://www.kaggle.com/CooperUnion/cardataset
 (save it in the root directory as "car_data.csv")
@@ -11,14 +13,14 @@ I used this dataset from Kaggle for test_scprse:
 https://www.kaggle.com/kwadwoofosu/predict-test-scores-of-students
 (save it in the root directory as "test_scores.csv")
 
-# How to run the project
+## How to run the project
 Run the project by running:
 ```
 $ python3 main.py
 ```
 
 
-# Description
+## Description
 
 The following models were run on the dataset:
     - K-Nearest-Neighbours
