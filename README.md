@@ -19,6 +19,11 @@ Run the project by running:
 $ python3 main.py
 ```
 
+Install dependencies with:
+```
+$ pip3 install -r requirements.txt
+```
+
 
 ## Description
 
