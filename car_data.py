@@ -1,5 +1,7 @@
 # %%
 import pandas as pd
+from os import path as os_path
+from datetime import datetime
 
 
 def load_dataframe():
@@ -100,7 +102,10 @@ def load_cleaned_car_data(return_df=False):
 
     if return_df:
         print("outputting to clean CSV")
-        df.to_csv("after_cleaning.csv")
+        current_time = datetime.now().strftime("%Y_%b_%d-%H_%M")
+        df.to_csv(
+            os_path.join("CSV_outputs", f"car_data_after_cleaning_{current_time}.csv")
+        )
         return df
 
     y = df[target_variable]
@@ -108,12 +113,13 @@ def load_cleaned_car_data(return_df=False):
     return X, y
 
 
+# Uncomment to run this as a cell and interact with the df variable
 # df = load_cleaned_car_data(return_df=True)
 # display(df)
 
 
-# # Extra data analytics we did when inspecting the data
-# # %%
+# Extra data analytics we ran when inspecting the data
+# %%
 # display(df.isna().sum())  # Check for NaNs
 # display(df.describe())
 # display(df.dtypes)
@@ -121,26 +127,3 @@ def load_cleaned_car_data(return_df=False):
 # print("DUPLICATES:::")
 # duplicated = df.duplicated(keep='last')
 # display(df[duplicated])
-
-# No duplicates found?
-# Replace float data-types with int
-
-# %%
-# df[df["Make"] == "BMW"]["MSRP"].mean()
-
-
-# %%
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-
-# sns.set(rc={"figure.figsize": (11.7, 8.27)})
-# plt.hist(self.df["latest_popularity"], bins=30)
-# plt.xlabel("(Current) popularity of all radio tracks played between 2015-2021")
-# plt.show()
-
-# # correlation between the features (excluding target)
-# # Created a dataframe without the 'popularity' col, since we need to see the correlation between the variables
-# track_data = pd.DataFrame(self.data, columns=self.feature_names)
-
-# correlation_matrix = track_data.corr().round(2)
-# sns.heatmap(data=correlation_matrix, annot=True)

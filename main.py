@@ -12,6 +12,8 @@ from datetime import datetime
 
 import matplotlib.pyplot as plt
 
+from os import path as os_path
+
 
 def run_all_models_on_dataset(
     models, data_set, dataset_name, output_to_csv=False, fit_hyper_parameters=False
@@ -56,8 +58,12 @@ def run_all_models_on_dataset(
 
             X_df["y"] = y
             X_df["y_hat"] = y_hat
-
-            X_df.to_csv(f"{model_name}_{dataset_name}.csv")
+            current_time = datetime.now().strftime("%Y_%b_%d-%H_%M")
+            X_df.to_csv(
+                os_path.join(
+                    "CSV_outputs", f"{model_name}_{dataset_name}_{current_time}.csv"
+                )
+            )
 
         # print(f"model_results:{model_results}")
         if model_results:
@@ -89,9 +95,11 @@ def run_all_models_on_dataset(
     )
     pd.options.display.float_format = "{:,.4f}".format
 
+    if output_to_csv:
+        current_time = datetime.now().strftime("%Y_%b_%d-%H_%M")
+        df.to_csv(os_path.join("CSV_outputs", f"results_df_{current_time}.csv"))
+
     print(df)
-    current_time = datetime.now().strftime("%Y_%b_%d-%H_%M")
-    df.to_csv(f"results_df_{current_time}.csv")
     print()
 
     best_result = df[df["validation_r^2_score"] == df["validation_r^2_score"].max()]
