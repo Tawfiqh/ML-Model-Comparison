@@ -5,7 +5,13 @@ from models.svr import Svr
 from models.decision_tree import DecisionTree
 from models.random_forest import RandomForest
 
-from data.get_data import get_car_data_train_test_val_datasets
+from data.get_data import (
+    get_boston_train_test_val_datasets,
+    get_diabetes_train_test_val_datasets,
+    get_school_data_train_test_val_datasets,
+    get_car_data_train_test_val_datasets,
+)
+
 import pandas as pd
 from time import perf_counter
 from datetime import datetime
@@ -231,9 +237,15 @@ def run_all_models_on_dataset(
     plt.show()
 
 
+boston_data_set = get_boston_train_test_val_datasets()
+diabetes_data_set = get_diabetes_train_test_val_datasets()
+school_results_data_set = get_school_data_train_test_val_datasets()
 car_results_data_set = get_car_data_train_test_val_datasets()
 
 datasets = [
+    ("boston_data_set", boston_data_set),
+    ("diabetes_data_set", diabetes_data_set),
+    ("school_results_data_set", school_results_data_set),
     ("car_results_data_set", car_results_data_set),
 ]
 
