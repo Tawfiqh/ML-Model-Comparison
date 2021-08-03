@@ -1,6 +1,6 @@
 from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV
-from BaseModel import BaseModel
+from .BaseModel import BaseModel
 import numpy as np
 
 

@@ -1,7 +1,7 @@
-from BaseModel import BaseModel
+from .BaseModel import BaseModel
 from sklearn import linear_model
 from sklearn.model_selection import GridSearchCV
-from BaseModel import BaseModel
+from .BaseModel import BaseModel
 
 
 class LinearRegressor(BaseModel):

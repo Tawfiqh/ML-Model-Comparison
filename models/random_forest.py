@@ -1,4 +1,4 @@
-from BaseModel import BaseModel
+from .BaseModel import BaseModel
 from sklearn.ensemble import RandomForestRegressor
 import pandas as pd
 

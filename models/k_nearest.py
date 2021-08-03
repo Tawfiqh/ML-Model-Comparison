@@ -1,5 +1,5 @@
 from sklearn.neighbors import KNeighborsRegressor
-from BaseModel import BaseModel
+from .BaseModel import BaseModel
 import pandas as pd
 
 
