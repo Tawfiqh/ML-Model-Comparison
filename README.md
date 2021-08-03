@@ -28,11 +28,11 @@ $ pip3 install -r requirements.txt
 ## Description
 
 The following models were run on the dataset:
-    - K-Nearest-Neighbours
-    - Linear Regression
-    - Decision Tree
-    - Random Forest
-    - SVR
+- K-Nearest-Neighbours
+- Linear Regression
+- Decision Tree
+- Random Forest
+- SVR
 
 Evaluates the performance of 5 key models:
 - it should evaluate the performance on the validation set ✅
