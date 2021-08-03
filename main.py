@@ -5,7 +5,7 @@ from models.svr import Svr
 from models.decision_tree import DecisionTree
 from models.random_forest import RandomForest
 
-from get_data import get_car_data_train_test_val_datasets
+from data.get_data import get_car_data_train_test_val_datasets
 import pandas as pd
 from time import perf_counter
 from datetime import datetime
