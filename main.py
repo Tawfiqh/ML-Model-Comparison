@@ -5,11 +5,27 @@ from models.svr import Svr
 from models.decision_tree import DecisionTree
 from models.random_forest import RandomForest
 
+
+from models.classification.k_nearest_classification import KNearestClassification
+from models.classification.DecisionTreeClassifier import DecisionTreeClassification
+from models.classification.GaussianBayes import GaussianNBClassifier
+from models.classification.GaussianProcessClassifier import (
+    GaussianProcessClassification,
+)
+from models.classification.LinearDiscriminator import LinearDiscriminantClassifier
+from models.classification.LogisticRegression import LogisticRegressionClassifier
+from models.classification.RandomForestClassifier import RandomForestClassification
+from models.classification.SVC import SVClassifier
+
+
 from data.get_data import (
     get_boston_train_test_val_datasets,
     get_diabetes_train_test_val_datasets,
     get_school_data_train_test_val_datasets,
     get_car_data_train_test_val_datasets,
+    get_breast_cancer_train_test_val_datasets,
+    get_iris_train_test_val_datasets,
+    get_wine_train_test_val_datasets,
 )
 
 import pandas as pd
@@ -237,31 +253,156 @@ def run_all_models_on_dataset(
     plt.show()
 
 
-boston_data_set = get_boston_train_test_val_datasets()
-diabetes_data_set = get_diabetes_train_test_val_datasets()
-school_results_data_set = get_school_data_train_test_val_datasets()
-car_results_data_set = get_car_data_train_test_val_datasets()
+def run_all_models_on_classification_dataset(
+    models, data_set, dataset_name, output_to_csv=False, fit_hyper_parameters=False
+):
+    all_model_results = []
 
-datasets = [
-    ("boston_data_set", boston_data_set),
-    ("diabetes_data_set", diabetes_data_set),
-    ("school_results_data_set", school_results_data_set),
-    ("car_results_data_set", car_results_data_set),
-]
+    for model_name in models.keys():
+        print()
+        print(f"Model: {model_name}")
+        model = models[model_name]
+        time_start = perf_counter()
 
+        # Tune (if the model has a function for tuning)
 
-for data_set_name, data_set in datasets:
-    models = {
-        "K-Nearest": KNearest(),
-        "LinearRegressor": LinearRegressor(),
-        "SVR": Svr(),
-        "DecisionTree": DecisionTree(),
-        "RandomForest": RandomForest(),
-    }
+        if fit_hyper_parameters and getattr(model, "find_hyper_paramters", None):
+            print("Fitting hyper_parameters")
+            model.find_hyper_paramters(data_set["train"], data_set["test"])
 
+        # Tune + FIT
+        model.fit(data_set["train"], dataset_train=data_set["test"])
+
+        time_finished_fit = perf_counter()
+        fit_time = time_finished_fit - time_start
+
+        # SCORE ALL
+        model_results = model.score_all(
+            data_set["train"], data_set["test"], data_set["val"]
+        )
+        time_finished_scoring = perf_counter()
+        scoring_time = time_finished_scoring - time_finished_fit
+
+        # model_mse_results = model.score_all_mse(
+        #     data_set["train"], data_set["test"], data_set["val"]
+        # )
+
+        # model_mean_absolute_error = model.mae(data_set["whole"])
+        # output the result
+        if output_to_csv:
+            X_df = pd.DataFrame(data_set["whole"][0])
+            y = pd.DataFrame(data_set["whole"][1])
+
+            y_hat = model.model.predict(data_set["whole"][0])
+            y_hat = pd.DataFrame(y_hat)
+
+            X_df["y"] = y
+            X_df["y_hat"] = y_hat
+            current_time = datetime.now().strftime("%Y_%b_%d-%H_%M")
+            X_df.to_csv(
+                os_path.join(
+                    "CSV_outputs", f"{model_name}_{dataset_name}_{current_time}.csv"
+                )
+            )
+
+        # print(f"model_results:{model_results}")
+        if model_results:
+            all_model_results.append(
+                [
+                    model_name,
+                    fit_time,
+                    scoring_time,
+                    # model_mean_absolute_error,
+                    *model_results,
+                    # *model_mse_results,
+                ]
+            )
+
+    df = pd.DataFrame(
+        all_model_results,
+        columns=[
+            "model_name",
+            "fit_time",
+            "scoring_time",
+            "training score",
+            "testing score",
+            "validation score",
+        ],
+    )
+    pd.options.display.float_format = "{:,.4f}".format
+
+    if output_to_csv:
+        current_time = datetime.now().strftime("%Y_%b_%d-%H_%M")
+        df.to_csv(os_path.join("CSV_outputs", f"results_df_{current_time}.csv"))
+
+    print(df)
     print()
-    print(f"EVALUATING {data_set_name}")
-    run_all_models_on_dataset(models, data_set, data_set_name, output_to_csv=True)
+
+    best_result = df[df["validation score"] == df["validation score"].max()]
+    print("Best model result:")
+    print(best_result["model_name"].head(1).item())
+
+
+regression_instead_of_classification = False
+
+if regression_instead_of_classification:
+    boston_data_set = get_boston_train_test_val_datasets()
+    diabetes_data_set = get_diabetes_train_test_val_datasets()
+    school_results_data_set = get_school_data_train_test_val_datasets()
+    car_results_data_set = get_car_data_train_test_val_datasets()
+
+    datasets = [
+        ("boston_data_set", boston_data_set),
+        ("diabetes_data_set", diabetes_data_set),
+        ("school_results_data_set", school_results_data_set),
+        ("car_results_data_set", car_results_data_set),
+    ]
+
+    for data_set_name, data_set in datasets:
+        models = {
+            "K-Nearest": KNearest(),
+            "LinearRegressor": LinearRegressor(),
+            "SVR": Svr(),
+            "DecisionTree": DecisionTree(),
+            "RandomForest": RandomForest(),
+        }
+
+        print()
+        print(f"EVALUATING {data_set_name}")
+        run_all_models_on_dataset(models, data_set, data_set_name, output_to_csv=True)
+
+else:
+    breast_cancer_data_set = get_breast_cancer_train_test_val_datasets()
+    iris_data_set = get_iris_train_test_val_datasets()
+    wine_data_set = get_wine_train_test_val_datasets()
+
+    datasets = [
+        ("breast_cancer_data_set", breast_cancer_data_set),
+        ("iris_data_set", iris_data_set),
+        ("wine_data_set", wine_data_set),
+    ]
+
+    for data_set_name, data_set in datasets:
+        models = {
+            "K-Nearest": KNearestClassification(),
+            "DecisionTree": DecisionTreeClassification(),
+            "GaussianNB": GaussianNBClassifier(),
+            "GaussianProcess": GaussianProcessClassification(),
+            "LinearDiscriminant": LinearDiscriminantClassifier(),
+            "LogisticRegression": LogisticRegressionClassifier(),
+            "RandomForest": RandomForestClassification(),
+            "SVC": SVClassifier(),
+        }
+
+        print()
+        print(f"EVALUATING {data_set_name}")
+        run_all_models_on_classification_dataset(
+            models,
+            data_set,
+            data_set_name,
+            output_to_csv=False,
+            fit_hyper_parameters=True,
+        )
 
 
 # %%

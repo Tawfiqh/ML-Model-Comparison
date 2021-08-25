@@ -65,3 +65,21 @@ def get_school_data_train_test_val_datasets():
 def get_car_data_train_test_val_datasets():
     X, y = load_cleaned_car_data()
     return split_into_train_test_val_datasets(X, y, normalize=True)
+
+
+def get_breast_cancer_train_test_val_datasets():
+    X, y = datasets.load_breast_cancer(return_X_y=True)
+    return split_into_train_test_val_datasets(X, y)
+    # return split_into_train_test_val_datasets(X,y, normalize=True)
+
+
+def get_iris_train_test_val_datasets():
+    X, y = datasets.load_iris(return_X_y=True)
+    return split_into_train_test_val_datasets(X, y)
+    # return split_into_train_test_val_datasets(X,y, normalize=True)
+
+
+def get_wine_train_test_val_datasets():
+    X, y = datasets.load_wine(return_X_y=True)
+    return split_into_train_test_val_datasets(X, y)
+    # return split_into_train_test_val_datasets(X,y, normalize=True)
