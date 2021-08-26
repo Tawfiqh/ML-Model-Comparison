@@ -305,7 +305,7 @@ def run_all_models_on_classification_dataset(
                 )
             )
 
-        # print(f"model_results:{model_results}")
+        print(f"model_results:{model_results}")
         if model_results:
             all_model_results.append(
                 [

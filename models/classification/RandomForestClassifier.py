@@ -6,11 +6,11 @@ import pandas as pd
 
 class RandomForestClassification(BaseClassificationModel):
     def __init__(self) -> None:
-        self.n_neighbors = 5
-        self.weights = "uniform"
-        self.algorithm = "auto"
-        self.leaf_size = 30
-        self.p = 2
+        self.n_estimators = 100
+        self.criterion = "gini"  # {“gini”, “entropy”}
+        self.max_depth = None
+        self.max_leaf_nodes = None
+        self.warm_start = False
 
     def find_hyper_paramters(self, dataset, test_dataset):
 
@@ -18,53 +18,59 @@ class RandomForestClassification(BaseClassificationModel):
         y = dataset[1]
 
         all_results = []
-        for weight in ["uniform", "distance"]:
-            for p in [1, 2]:
-                for algorithm in ["auto", "ball_tree", "kd_tree", "brute"]:
-                    for n_neighbors in range(2, 90, 10):
-                        for leaf_size in range(10, 100, 10):
-                            score = self._fit_hyperparameters(
-                                X,
-                                y,
-                                test_dataset,
-                                n_neighbors,
-                                weight,
-                                algorithm,
-                                leaf_size,
-                                p,
-                            )
-                            results = [
-                                n_neighbors,
-                                weight,
-                                algorithm,
-                                leaf_size,
-                                p,
-                                score,
-                            ]
 
-                            # print(
-                            #     f"Trained model with algorithm-{algorithm}  n_neighbors-{n_neighbors}  leaf_size-{leaf_size}  and score:{score}"
-                            # )
-                            all_results.append(results)
+        max_depth = self.max_depth
+        warm_start = self.warm_start
+        criterion = "entropy"  # self.criterion
+        for n_estimators in range(100, 1000, 100):
+            for criterion in ["gini", "entropy"]:
+                for max_leaf_nodes in [None, *range(2, 100, 10)]:
+
+                    score = self._fit_hyperparameters(
+                        X,
+                        y,
+                        test_dataset,
+                        n_estimators,
+                        criterion,
+                        max_depth,
+                        max_leaf_nodes,
+                        warm_start,
+                    )
+                    results = [
+                        n_estimators,
+                        criterion,
+                        max_depth,
+                        max_leaf_nodes,
+                        warm_start,
+                        score,
+                    ]
+                    print(
+                        f"n_estimators={n_estimators}  criterion={criterion}  max_depth={max_depth}  max_leaf_nodes={max_leaf_nodes}  warm_start={warm_start}  score={score}"
+                    )
+                    all_results.append(results)
 
         df = pd.DataFrame(
             all_results,
-            columns=["n_neighbors", "weight", "algorithm", "leaf_size", "p", "score"],
+            columns=[
+                "n_estimators",
+                "criterion",
+                "max_depth",
+                "max_leaf_nodes",
+                "warm_start",
+                "score",
+            ],
         )
         pd.options.display.float_format = "{:,.4f}".format
-        # print("Hypertuning k-nearest - results:")
-        # print(df)
-        # print()
 
         best_result = df[df["score"] == df["score"].max()]
-        # print("Best model result:")
-        # print(best_result)
+        print("Best model result:")
+        print(best_result)
 
-        self.n_neighbors = best_result["n_neighbors"].head(1).item()
-        self.weight = best_result["weight"].head(1).item()
-        self.algorithm = best_result["algorithm"].head(1).item()
-        self.leaf_size = best_result["leaf_size"].head(1).item()
-        self.p = best_result["p"].head(1).item()
+        self.n_estimators = best_result["n_estimators"].head(1).item()
+        self.criterion = best_result["criterion"].head(1).item()
+        self.max_depth = best_result["max_depth"].head(1).item()
+        self.max_leaf_nodes = best_result["max_leaf_nodes"].head(1).item()
+        self.warm_start = best_result["warm_start"].head(1).item()
 
     def fit(self, dataset, dataset_train):
         X = dataset[0]
@@ -74,11 +80,11 @@ class RandomForestClassification(BaseClassificationModel):
             X,
             y,
             dataset_train,
-            self.n_neighbors,
-            self.weights,
-            self.algorithm,
-            self.leaf_size,
-            self.p,
+            n_estimators=self.n_estimators,
+            criterion=self.criterion,
+            max_depth=self.max_depth,
+            max_leaf_nodes=self.max_leaf_nodes,
+            warm_start=self.warm_start,
         )
 
     def _fit_hyperparameters(
@@ -86,27 +92,19 @@ class RandomForestClassification(BaseClassificationModel):
         X,
         y,
         test_dataset,
-        n_neighbors,
-        weights,
-        algorithm,
-        leaf_size,
-        p,
+        n_estimators,
+        criterion,
+        max_depth,
+        max_leaf_nodes,
+        warm_start,
     ):
-        self.model = KNeighborsClassifier(
-            n_neighbors=n_neighbors,
-            weights=weights,
-            algorithm=algorithm,
-            leaf_size=leaf_size,
-            p=p,
+        self.model = RandomForestClassifier(
+            n_estimators=n_estimators,
+            criterion=criterion,
+            max_depth=max_depth,
+            max_leaf_nodes=max_leaf_nodes,
+            warm_start=warm_start,
         )
-        # KNeighborsClassifier(n_neighbors=5,
-        #  weights='uniform',
-        #  algorithm='auto',
-        #  leaf_size=30,
-        #  p=2,
-        #  metric='minkowski',
-        #  metric_params=None,
-        #  n_jobs=None)s
 
         self.model.fit(X, y)
         if test_dataset:
