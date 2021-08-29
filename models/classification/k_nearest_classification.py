@@ -56,8 +56,8 @@ class KNearestClassification(BaseClassificationModel):
         # print()
 
         best_result = df[df["score"] == df["score"].max()]
-        # print("Best model result:")
-        # print(best_result)
+        print("Best model result:")
+        print(best_result)
 
         self.n_neighbors = best_result["n_neighbors"].head(1).item()
         self.weight = best_result["weight"].head(1).item()

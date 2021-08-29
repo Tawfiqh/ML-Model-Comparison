@@ -69,8 +69,8 @@ class DecisionTreeClassification(BaseClassificationModel):
         # print()
 
         best_result = df[df["score"] == df["score"].max()]
-        print("Best model result:")
-        print(best_result)
+        # print("Best model result:")
+        # print(best_result)
 
         self.criterion = best_result["criterion"].head(1).item()
         self.max_leaf_nodes = best_result["max_leaf_nodes"].head(1).item()

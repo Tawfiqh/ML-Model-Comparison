@@ -63,8 +63,8 @@ class RandomForestClassification(BaseClassificationModel):
         pd.options.display.float_format = "{:,.4f}".format
 
         best_result = df[df["score"] == df["score"].max()]
-        print("Best model result:")
-        print(best_result)
+        # print("Best model result:")
+        # print(best_result)
 
         self.n_estimators = best_result["n_estimators"].head(1).item()
         self.criterion = best_result["criterion"].head(1).item()

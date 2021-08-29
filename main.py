@@ -289,6 +289,8 @@ def run_all_models_on_classification_dataset(
         )
 
         model_precision = model.score_precision(data_set["val"])
+        model_recall = model.score_recall(data_set["val"])
+
         # output the result
         if output_to_csv:
             X_df = pd.DataFrame(data_set["whole"][0])
@@ -316,6 +318,7 @@ def run_all_models_on_classification_dataset(
                     *model_results,
                     *model_f1_results,
                     model_precision,
+                    model_recall,
                 ]
             )
 
@@ -332,6 +335,7 @@ def run_all_models_on_classification_dataset(
             "testing f1-score",
             "validation f1-score",
             "model score precision",
+            "model_recall",
         ],
     )
     pd.options.display.float_format = "{:,.4f}".format
@@ -343,9 +347,14 @@ def run_all_models_on_classification_dataset(
     print(df)
     print()
 
-    best_result = df[df["validation f1-score"] == df["validation f1-score"].max()]
+    best_result = df[df["model_recall"] == df["model_recall"].max()]
+
+    best_model = best_result["model_name"].head(1).item()
+    model_recall = best_result["model_recall"].head(1).item()
     print("Best model result:")
-    print(best_result["model_name"].head(1).item())
+    print(f"{best_model}: {model_recall}")
+
+    return best_model
 
 
 regression_instead_of_classification = False
@@ -389,7 +398,15 @@ else:
         # ("wine_data_set", wine_data_set),
     ]
 
-    for data_set_name, data_set in datasets:
+    # for data_set_name, data_set in datasets:
+
+    all_df_results = {}
+    for i in range(100):
+        data_set_name, data_set = (
+            "heart_cancer_data_set",
+            get_heart_cancer_train_test_val_datasets(),
+        )
+
         models = {
             "K-Nearest": KNearestClassification(),
             "DecisionTree": DecisionTreeClassification(),
@@ -403,13 +420,19 @@ else:
 
         print()
         print(f"EVALUATING {data_set_name}")
-        run_all_models_on_classification_dataset(
+        best_model = run_all_models_on_classification_dataset(
             models,
             data_set,
             data_set_name,
             output_to_csv=False,
             fit_hyper_parameters=True,
         )
+
+        if not best_model in all_df_results:
+            all_df_results[best_model] = 0
+
+        all_df_results[best_model] = all_df_results[best_model] + 1
+        print(f"{i}: all_df_results: {all_df_results}")
 
 
 # %%

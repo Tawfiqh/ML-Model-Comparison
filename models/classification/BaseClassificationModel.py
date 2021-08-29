@@ -1,4 +1,4 @@
-from sklearn.metrics import f1_score, precision_score
+from sklearn.metrics import f1_score, precision_score, recall_score
 import pandas as pd
 import numpy as np
 
@@ -31,6 +31,14 @@ class BaseClassificationModel:
         y_pred = self.model.predict(X_true)
 
         return precision_score(y_true, y_pred)
+
+    def score_recall(self, dataset):
+        X_true = dataset[0]
+        y_true = dataset[1]
+
+        y_pred = self.model.predict(X_true)
+
+        return recall_score(y_true, y_pred)
 
     def score_all_f1(self, train, test, val):
         train_score = self._f1_score(train)

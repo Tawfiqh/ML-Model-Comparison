@@ -51,8 +51,8 @@ class LogisticRegressionClassifier(BaseClassificationModel):
         pd.options.display.float_format = "{:,.4f}".format
 
         best_result = df[df["score"] == df["score"].max()]
-        print("Best model result:")
-        print(best_result)
+        # print("Best model result:")
+        # print(best_result)
 
         penalty = best_result["penalty"].head(1).item()
         fit_intercept = best_result["fit_intercept"].head(1).item()

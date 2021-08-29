@@ -37,8 +37,8 @@ class SVClassifier(BaseClassificationModel):
         pd.options.display.float_format = "{:,.4f}".format
 
         best_result = df[df["score"] == df["score"].max()]
-        print("Best model result:")
-        print(best_result)
+        # print("Best model result:")
+        # print(best_result)
 
         self.break_ties = best_result["break_ties"].head(1).item()
 

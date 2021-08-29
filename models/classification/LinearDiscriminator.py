@@ -38,8 +38,8 @@ class LinearDiscriminantClassifier(BaseClassificationModel):
         pd.options.display.float_format = "{:,.4f}".format
 
         best_result = df[df["score"] == df["score"].max()]
-        print("Best model result:")
-        print(best_result)
+        # print("Best model result:")
+        # print(best_result)
 
         self.solver = best_result["solver"].head(1).item()
 

@@ -55,8 +55,8 @@ class GaussianProcessClassification(BaseClassificationModel):
         # print()
 
         best_result = df[df["score"] == df["score"].max()]
-        print("Best model result:")
-        print(best_result)
+        # print("Best model result:")
+        # print(best_result)
 
         self.max_iter_predict = best_result["max_iter_predict"].head(1).item()
         self.warm_start = best_result["warm_start"].head(1).item()
