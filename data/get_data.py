@@ -3,6 +3,7 @@ from sklearn import model_selection
 from sklearn import preprocessing
 from .car_data import load_cleaned_car_data
 from .school_data import load_cleaned_school_data
+from .heart_data import load_heart_cancer_dataset
 
 
 def generate_random_seed():
@@ -65,6 +66,11 @@ def get_school_data_train_test_val_datasets():
 def get_car_data_train_test_val_datasets():
     X, y = load_cleaned_car_data()
     return split_into_train_test_val_datasets(X, y, normalize=True)
+
+
+def get_heart_cancer_train_test_val_datasets():
+    X, y = load_heart_cancer_dataset()
+    return split_into_train_test_val_datasets(X, y)
 
 
 def get_breast_cancer_train_test_val_datasets():

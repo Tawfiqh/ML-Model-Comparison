@@ -24,6 +24,7 @@ from data.get_data import (
     get_school_data_train_test_val_datasets,
     get_car_data_train_test_val_datasets,
     get_breast_cancer_train_test_val_datasets,
+    get_heart_cancer_train_test_val_datasets,
     get_iris_train_test_val_datasets,
     get_wine_train_test_val_datasets,
 )
@@ -259,8 +260,8 @@ def run_all_models_on_classification_dataset(
     all_model_results = []
 
     for model_name in models.keys():
-        print()
-        print(f"Model: {model_name}")
+        # print()
+        # print(f"Model: {model_name}")
         model = models[model_name]
         time_start = perf_counter()
 
@@ -283,11 +284,11 @@ def run_all_models_on_classification_dataset(
         time_finished_scoring = perf_counter()
         scoring_time = time_finished_scoring - time_finished_fit
 
-        # model_mse_results = model.score_all_mse(
-        #     data_set["train"], data_set["test"], data_set["val"]
-        # )
+        model_f1_results = model.score_all_f1(
+            data_set["train"], data_set["test"], data_set["val"]
+        )
 
-        # model_mean_absolute_error = model.mae(data_set["whole"])
+        model_precision = model.score_precision(data_set["val"])
         # output the result
         if output_to_csv:
             X_df = pd.DataFrame(data_set["whole"][0])
@@ -305,16 +306,16 @@ def run_all_models_on_classification_dataset(
                 )
             )
 
-        print(f"model_results:{model_results}")
+        # print(f"model_results:{model_results}")
         if model_results:
             all_model_results.append(
                 [
                     model_name,
                     fit_time,
                     scoring_time,
-                    # model_mean_absolute_error,
                     *model_results,
-                    # *model_mse_results,
+                    *model_f1_results,
+                    model_precision,
                 ]
             )
 
@@ -327,6 +328,10 @@ def run_all_models_on_classification_dataset(
             "training score",
             "testing score",
             "validation score",
+            "training f1-score",
+            "testing f1-score",
+            "validation f1-score",
+            "model score precision",
         ],
     )
     pd.options.display.float_format = "{:,.4f}".format
@@ -338,7 +343,7 @@ def run_all_models_on_classification_dataset(
     print(df)
     print()
 
-    best_result = df[df["validation score"] == df["validation score"].max()]
+    best_result = df[df["validation f1-score"] == df["validation f1-score"].max()]
     print("Best model result:")
     print(best_result["model_name"].head(1).item())
 
@@ -373,13 +378,15 @@ if regression_instead_of_classification:
 
 else:
     breast_cancer_data_set = get_breast_cancer_train_test_val_datasets()
+    heart_cancer_data_set = get_heart_cancer_train_test_val_datasets()
     iris_data_set = get_iris_train_test_val_datasets()
     wine_data_set = get_wine_train_test_val_datasets()
 
     datasets = [
-        ("breast_cancer_data_set", breast_cancer_data_set),
-        ("iris_data_set", iris_data_set),
-        ("wine_data_set", wine_data_set),
+        ("heart_cancer_data_set", heart_cancer_data_set),
+        # ("breast_cancer_data_set", breast_cancer_data_set),
+        # ("iris_data_set", iris_data_set),
+        # ("wine_data_set", wine_data_set),
     ]
 
     for data_set_name, data_set in datasets:

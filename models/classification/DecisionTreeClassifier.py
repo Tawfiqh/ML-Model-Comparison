@@ -48,7 +48,7 @@ class DecisionTreeClassification(BaseClassificationModel):
                         min_samples_split,
                         score,
                     ]
-                    print(f"score: {score} --- {results}")
+                    # print(f"score: {score} --- {results}")
                     all_results.append(results)
 
         df = pd.DataFrame(

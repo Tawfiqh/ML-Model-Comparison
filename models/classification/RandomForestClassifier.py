@@ -24,7 +24,7 @@ class RandomForestClassification(BaseClassificationModel):
         criterion = "entropy"  # self.criterion
         for n_estimators in range(100, 1000, 100):
             for criterion in ["gini", "entropy"]:
-                for max_leaf_nodes in [None, *range(2, 100, 10)]:
+                for max_leaf_nodes in [None]:  # , *range(2, 100, 10)]:
 
                     score = self._fit_hyperparameters(
                         X,
@@ -44,9 +44,9 @@ class RandomForestClassification(BaseClassificationModel):
                         warm_start,
                         score,
                     ]
-                    print(
-                        f"n_estimators={n_estimators}  criterion={criterion}  max_depth={max_depth}  max_leaf_nodes={max_leaf_nodes}  warm_start={warm_start}  score={score}"
-                    )
+                    # print(
+                    #     f"n_estimators={n_estimators}  criterion={criterion}  max_depth={max_depth}  max_leaf_nodes={max_leaf_nodes}  warm_start={warm_start}  score={score}"
+                    # )
                     all_results.append(results)
 
         df = pd.DataFrame(
