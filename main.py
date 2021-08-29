@@ -302,11 +302,9 @@ def run_all_models_on_classification_dataset(
             X_df["y"] = y
             X_df["y_hat"] = y_hat
             current_time = datetime.now().strftime("%Y_%b_%d-%H_%M")
-            X_df.to_csv(
-                os_path.join(
-                    "CSV_outputs", f"{model_name}_{dataset_name}_{current_time}.csv"
-                )
-            )
+            output_filename = f"{model_name}_{dataset_name}_{current_time}.csv"
+            print(f"Outputting to CSV_outputs/{output_filename}")
+            X_df.to_csv(os_path.join("CSV_outputs", output_filename))
 
         # print(f"model_results:{model_results}")
         if model_results:

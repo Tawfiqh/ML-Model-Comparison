@@ -70,7 +70,7 @@ def get_car_data_train_test_val_datasets():
 
 def get_heart_cancer_train_test_val_datasets():
     X, y = load_heart_cancer_dataset()
-    return split_into_train_test_val_datasets(X, y)
+    return split_into_train_test_val_datasets(X, y, normalize=True)
 
 
 def get_breast_cancer_train_test_val_datasets():
