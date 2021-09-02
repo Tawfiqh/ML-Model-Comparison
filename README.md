@@ -13,6 +13,12 @@ I used this dataset from Kaggle for test_scprse:
 https://www.kaggle.com/kwadwoofosu/predict-test-scores-of-students
 (save it in the root directory as "test_scores.csv")
 
+
+
+https://www.kaggle.com/cherngs/heart-disease-cleveland-uci
+(save it in the root directory as "heart_cancer_data.csv")
+
+
 ## How to run the project
 Run the project by running:
 ```
